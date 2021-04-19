@@ -8,7 +8,7 @@ logger.setLevel(logging.INFO)
 client = boto3.client('emr')
 
 """
-    input_data: emr_provision_lambda_function_input.json
+    configure constant input: emr_provision_lambda_function_input.json
     triggered by CloudWatch event: emr_demo_trigger_provisioning_lambda_function
 """
 def lambda_handler(event, context):
