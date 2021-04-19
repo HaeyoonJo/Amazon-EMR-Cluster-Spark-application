@@ -1,17 +1,18 @@
 import json
 import boto3
 import logging
-
+from datetime import date, datetime
+import datetime
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 client = boto3.client('emr')
-
 """
     configure constant input: emr_provision_lambda_function_input.json
     triggered by CloudWatch event: emr_demo_trigger_provisioning_lambda_function
 """
 def lambda_handler(event, context):
+    d_time = datetime.datetime.now().replace(microsecond=0).isoformat()
     try:
         response = client.run_job_flow(
             Name    = 'My_cluster',
@@ -68,7 +69,7 @@ def lambda_handler(event, context):
                             "--data_source",
                             event['pre_process_health_violation_data_source'],
                             "--output_uri",
-                            event['pre_process_health_violation_output_uri']
+                            event['pre_process_health_violation_output_uri']+'_'+d_time
                         ]
                     }
                 },
@@ -83,7 +84,7 @@ def lambda_handler(event, context):
                             "cluster",
                             event['post_process_emr_demo_app'],
                             "--output_uri",
-                            event['post_process_emr_demo_app_output_uri']
+                            event['post_process_emr_demo_app_output_uri']+'_'+d_time
                         ]
                     }
                 }
